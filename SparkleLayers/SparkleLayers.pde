@@ -1,6 +1,9 @@
+
 OPC opc;
 RedLayer r;
 GreenLayer g;
+
+HashMap<Integer, Integer> faders = initFaders();
 void setup()
 {
   size(360, 900);
@@ -19,10 +22,31 @@ void setup()
   r = new RedLayer(rl);
   g = new GreenLayer(gl);
   
+  MidiBus myBus = new MidiBus(this, "Launch Control XL", -1);
+
 }
 
 void draw() {
    background(0, 0);
-   g.drawWithAlpha(.5);
-   r.drawWithAlpha(1.0);
+   g.drawWithAlpha(faders.get(0) / 127.0 );
+   r.drawWithAlpha(faders.get(1) / 127.0 );
+}
+
+void controllerChange(ControlChange change) {
+  // Receive a controllerChange
+  // Faders start at 77 and go up one at a time
+  faders.put(change.number() - 77, change.value());
+}
+
+HashMap<Integer, Integer> initFaders() {
+  HashMap<Integer, Integer> faders = new HashMap();
+  faders.put(0,0);
+  faders.put(1,0);
+  faders.put(2,0);
+  faders.put(3,0);
+  faders.put(4,0);
+  faders.put(5,0);
+  faders.put(6,0);
+  faders.put(7,0);
+  return faders;
 }
