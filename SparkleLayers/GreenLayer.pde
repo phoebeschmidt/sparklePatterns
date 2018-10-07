@@ -10,4 +10,9 @@ public class GreenLayer extends Layer {
     this.pg.endDraw();
     image(pg, 0, 0);
   }
+  
+  public void setParam1(int v){}
+  public void setParam2(int v){}
+  public void setParam3(int v){}
+
 }

@@ -13,5 +13,9 @@ public abstract class Layer {
     this.draw();
     noTint();
   }
+  
+  public abstract void setParam1(int v);
+  public abstract void setParam2(int v);
+  public abstract void setParam3(int v);
 
 }
