@@ -3,12 +3,13 @@ import themidibus.*;
 OPC opc;
 RedLayer r;
 GreenLayer g;
+CloudLayer c;
 
 HashMap<Integer, Integer> faders = initFaders();
 HashMap<Integer, Integer[]> knobs = initKnobs();
 void setup()
 {
-  size(360, 900);
+  size(120, 300);
 
   // Connect to the local instance of fcserver. You can change this line to connect to another computer's fcserver
   opc = new OPC(this, "127.0.0.1", 7890);
@@ -20,9 +21,12 @@ void setup()
   //opc.setStatusLed(false);
   
   PGraphics rl = createGraphics(width, height);
-  PGraphics gl = createGraphics(width/2, height/2);
+  PGraphics cl = createGraphics(width, height);
+
+  PGraphics gl = createGraphics(width, height);
   r = new RedLayer(rl);
   g = new GreenLayer(gl);
+  c = new CloudLayer(cl);
   
   MidiBus myBus = new MidiBus(this, "Launch Control XL", -1);
 
@@ -33,8 +37,11 @@ void draw() {
    
    r.setParam1(knobs.get(1)[0]);
    
+   // Order matters! Last one drawn will be on top.
    g.drawWithAlpha(faders.get(0) / 127.0 );
    r.drawWithAlpha(faders.get(1) / 127.0 );
+   c.drawWithAlpha(faders.get(2) / 127.0 );
+
 }
 
 void controllerChange(ControlChange change) {
