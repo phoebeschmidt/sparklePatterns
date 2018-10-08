@@ -12,6 +12,8 @@ public class GreenLayer extends Layer {
   public void drawWithAlpha(float a) {
     this.pg.beginDraw();
     this.pg.background(0,0);
+    colorMode(HSB, 100);
+
     long now = millis();
     float speed = 0.002;
     float angle = sin(now * 0.001);
@@ -44,6 +46,7 @@ public class GreenLayer extends Layer {
     
     this.pg.endDraw();
     image(pg, 0, 0);
+    colorMode(RGB, 255);
   }
   
   float fractalNoise(float x, float y, float z) {

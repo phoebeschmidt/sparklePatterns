@@ -18,11 +18,10 @@ void setup()
   opc.ledGrid(0, 30, 12, width/2, height/2, height/30.0, width/12.0, -HALF_PI, false);
   
   //// Make the status LED quiet
-  //opc.setStatusLed(false);
+  opc.setStatusLed(false);
   
   PGraphics rl = createGraphics(width, height);
   PGraphics cl = createGraphics(width, height);
-
   PGraphics gl = createGraphics(width, height);
   r = new RedLayer(rl);
   g = new GreenLayer(gl);
