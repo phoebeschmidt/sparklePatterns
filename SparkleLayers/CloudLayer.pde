@@ -6,7 +6,7 @@ public class GreenLayer extends Layer {
   }
   
   public void draw() {
-    
+    this.drawWithAlpha(1.0);
   }
   
   public void drawWithAlpha(float a) {
