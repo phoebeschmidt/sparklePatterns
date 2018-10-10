@@ -1,6 +1,6 @@
-public class CloudLayer extends Layer {
+public class GreenLayer extends Layer {
   
-  public CloudLayer(PGraphics pg) {
+  public GreenLayer(PGraphics pg) {
     super(pg);
   }
   

@@ -1,7 +1,7 @@
-public class GreenLayer extends Layer {
+public class CloudLayer extends Layer {
   float dx, dy;
 
-  public GreenLayer(PGraphics pg) {
+  public CloudLayer(PGraphics pg) {
     super(pg);
   }
   
