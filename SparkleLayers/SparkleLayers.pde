@@ -56,7 +56,7 @@ void toggleAutoPilot() {
     myBus.sendNoteOn(1, 60, 127);
   } else {
     if (attached.length > 0) {
-      myBus.sendNoteOff(1, 60, 0);
+      myBus.sendNoteOff(1, 60, 127);
     }
     println("autoPilot off");
     autoPilot = false; 
@@ -65,6 +65,7 @@ void toggleAutoPilot() {
 
 void connectToLaunchControl() {
   String[] inputs = myBus.availableInputs();
+  println(inputs);
   if (Arrays.asList(inputs).indexOf("Launch Control XL") > -1) {
     autoPilot = false;
     myBus.addInput("Launch Control XL");
@@ -128,4 +129,8 @@ HashMap<Integer, Integer[]> initKnobs() {
   knobs.put(6, new Integer[]{0, 0, 0});
   knobs.put(7, new Integer[]{0, 0, 0});
   return knobs;
+}
+
+void autoUpdate() {
+   
 }
