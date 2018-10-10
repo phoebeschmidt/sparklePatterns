@@ -35,7 +35,7 @@ public class CloudLayer extends Layer {
            ((hue + 80.0 * m) % 100.0),
            (100 - 100 * constrain(pow(3.0 * n, 3.5), 0, 0.9)),
            (100 * constrain(pow(3.0 * n, 1.5), 0, 0.9)),
-           map(a, 0.0, 1.0, 0, 255)
+           map(a, 0.0, 1.0, 0, 127)
            );
         
         this.pg.pixels[x + this.pg.width*y] = c;

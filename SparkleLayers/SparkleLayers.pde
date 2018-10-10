@@ -4,6 +4,9 @@ OPC opc;
 RedLayer r;
 GreenLayer g;
 CloudLayer c;
+boolean autoPilot = false;
+MidiBus myBus;
+Integer counter;
 
 HashMap<Integer, Integer> faders = initFaders();
 HashMap<Integer, Integer[]> knobs = initKnobs();
@@ -27,31 +30,74 @@ void setup()
   g = new GreenLayer(gl);
   c = new CloudLayer(cl);
   
-  MidiBus myBus = new MidiBus(this, "Launch Control XL", -1);
+  myBus = new MidiBus(this, -1, -1);
+  connectToLaunchControl();
 
 }
 
 void draw() {
    background(0, 0);
    
+   // Map params to different knobs
    r.setParam1(knobs.get(1)[0]);
    
    // Order matters! Last one drawn will be on top.
-   g.drawWithAlpha(faders.get(0) / 127.0 );
-   r.drawWithAlpha(faders.get(1) / 127.0 );
-   c.drawWithAlpha(faders.get(2) / 127.0 );
+   c.drawWithAlpha(faders.get(0) / 127.0 );
+   g.drawWithAlpha(faders.get(1) / 127.0 );
+   r.drawWithAlpha(faders.get(2) / 127.0 );
 
 }
 
+void toggleAutoPilot() {
+  String[] attached = myBus.attachedInputs();
+  if (!autoPilot && attached.length > 0) { // If autoPilot is off and we are connected, turn on
+    println("autoPilot on");
+    autoPilot = true;
+    myBus.sendNoteOn(1, 60, 127);
+  } else {
+    if (attached.length > 0) {
+      myBus.sendNoteOff(1, 60, 0);
+    }
+    println("autoPilot off");
+    autoPilot = false; 
+  }
+}
+
+void connectToLaunchControl() {
+  String[] inputs = myBus.availableInputs();
+  if (Arrays.asList(inputs).indexOf("Launch Control XL") > -1) {
+    autoPilot = false;
+    myBus.addInput("Launch Control XL");
+    myBus.addOutput("Launch Control XL");
+    println(myBus.attachedOutputs());
+    myBus.sendNoteOn(1, 60, 100);
+    println("Connected to Launch Control XL");
+  } else {
+    autoPilot = true;
+    println("No Launch Control, turning auto pilot on");
+  }
+}
+
+void noteOn(int channel, int pitch, int velocity) {
+   if (pitch == 60) { // Solo Button
+    toggleAutoPilot();
+  }
+}
 void controllerChange(ControlChange change) {
   // Receive a controllerChange
   // Faders start at 77 and go up one at a time
   // Knobs start at 1. numbering goes down a column, then over to the right until 24 (three rows of 8 columns)
+
   int number = change.number();
-  if (number >= 77 && number <= 84) {
+  if (number >= 77 && number <= 84) { // Faders
+    if (autoPilot) {
+      return; 
+    }
     faders.put(change.number() - 77, change.value());  
-  } else if (number >= 1 && number <= 24) {
-    println(number, change.value());
+  } else if (number >= 1 && number <= 24) { // Knobs
+    if (autoPilot) {
+      return; 
+    }
     int column = Math.floorDiv((number - 1), 3);
     int row = (number - 1) % 3;
     knobs.get(column)[row] = change.value(); // Update in place
