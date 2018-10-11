@@ -1,15 +1,15 @@
 import themidibus.*;
 
 OPC opc;
-RedLayer r;
-GreenLayer g;
-CloudLayer c;
 boolean autoPilot = false;
 MidiBus myBus;
 Integer counter;
 
 HashMap<Integer, Parameter> faders = initFaders();
 HashMap<Integer, Parameter[]> knobs = initKnobs();
+
+ArrayList<Layer> layers = new ArrayList();
+
 void setup()
 {
   size(120, 300);
@@ -23,12 +23,9 @@ void setup()
   //// Make the status LED quiet
   opc.setStatusLed(false);
   
-  PGraphics rl = createGraphics(width, height);
-  PGraphics cl = createGraphics(width, height);
-  PGraphics gl = createGraphics(width, height);
-  r = new RedLayer(rl);
-  g = new GreenLayer(gl);
-  c = new CloudLayer(cl);
+  layers.add(new RedLayer(createGraphics(width, height)));
+  layers.add(new GreenLayer(createGraphics(width, height)));
+  layers.add(new CloudLayer(createGraphics(width, height)));
   
   myBus = new MidiBus(this, -1, -1);
   connectToLaunchControl();
@@ -41,14 +38,14 @@ void draw() {
      autoUpdate();
    }
    
-   // Map params to different knobs
-   r.setParam1(knobs.get(2)[0].getValue());
-   
    // Order matters! Last one drawn will be on top.
-   c.drawWithAlpha(faders.get(0).getValue() );
-   g.drawWithAlpha(faders.get(1).getValue() );
-   r.drawWithAlpha(faders.get(2).getValue() );
-
+   for (int i = 0; i < layers.size(); i++) {
+     Layer l = layers.get(i);
+     l.drawWithAlpha(faders.get(i).getValue());
+     l.setParam1(knobs.get(i)[0].getValue());
+     l.setParam2(knobs.get(i)[1].getValue());
+     l.setParam3(knobs.get(i)[2].getValue());
+   }
 }
 
 void toggleAutoPilot() {
