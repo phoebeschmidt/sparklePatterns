@@ -26,6 +26,8 @@ void setup()
   layers.add(new RedLayer(createGraphics(width, height)));
   layers.add(new GreenLayer(createGraphics(width, height)));
   layers.add(new CloudLayer(createGraphics(width, height)));
+  layers.add(new RandomLayer(createGraphics(width, height)));
+  layers.add(new StrobeLayer(createGraphics(width, height)));
   
   myBus = new MidiBus(this, -1, -1);
   connectToLaunchControl();
