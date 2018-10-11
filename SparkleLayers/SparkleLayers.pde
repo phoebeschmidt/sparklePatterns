@@ -8,8 +8,8 @@ boolean autoPilot = false;
 MidiBus myBus;
 Integer counter;
 
-HashMap<Integer, Integer> faders = initFaders();
-HashMap<Integer, Integer[]> knobs = initKnobs();
+HashMap<Integer, Parameter> faders = initFaders();
+HashMap<Integer, Parameter[]> knobs = initKnobs();
 void setup()
 {
   size(120, 300);
@@ -37,14 +37,17 @@ void setup()
 
 void draw() {
    background(0, 0);
+   if (autoPilot) {
+     autoUpdate();
+   }
    
    // Map params to different knobs
-   r.setParam1(knobs.get(1)[0]);
+   r.setParam1(knobs.get(2)[0].getValue());
    
    // Order matters! Last one drawn will be on top.
-   c.drawWithAlpha(faders.get(0) / 127.0 );
-   g.drawWithAlpha(faders.get(1) / 127.0 );
-   r.drawWithAlpha(faders.get(2) / 127.0 );
+   c.drawWithAlpha(faders.get(0).getValue() );
+   g.drawWithAlpha(faders.get(1).getValue() );
+   r.drawWithAlpha(faders.get(2).getValue() );
 
 }
 
@@ -94,43 +97,48 @@ void controllerChange(ControlChange change) {
     if (autoPilot) {
       return; 
     }
-    faders.put(change.number() - 77, change.value());  
+    faders.get(change.number() - 77).setValue(change.value(), 0, 127);  
   } else if (number >= 1 && number <= 24) { // Knobs
     if (autoPilot) {
       return; 
     }
     int column = Math.floorDiv((number - 1), 3);
     int row = (number - 1) % 3;
-    knobs.get(column)[row] = change.value(); // Update in place
+    knobs.get(column)[row].setValue(change.value(), 0, 127); // Update in place
   }
 }
 
-HashMap<Integer, Integer> initFaders() {
-  HashMap<Integer, Integer> faders = new HashMap();
-  faders.put(0,0);
-  faders.put(1,0);
-  faders.put(2,0);
-  faders.put(3,0);
-  faders.put(4,0);
-  faders.put(5,0);
-  faders.put(6,0);
-  faders.put(7,0);
+HashMap<Integer, Parameter> initFaders() {
+  HashMap<Integer, Parameter> faders = new HashMap();
+  faders.put(0, new Parameter(0));
+  faders.put(1, new Parameter(0));
+  faders.put(2, new Parameter(0));
+  faders.put(3, new Parameter(0));
+  faders.put(4, new Parameter(0));
+  faders.put(5, new Parameter(0));
+  faders.put(6, new Parameter(0));
+  faders.put(7, new Parameter(0));
   return faders;
 }
 
-HashMap<Integer, Integer[]> initKnobs() {
-  HashMap<Integer, Integer[]> knobs = new HashMap();
-  knobs.put(0, new Integer[]{0, 0, 0});
-  knobs.put(1, new Integer[]{0, 0, 0});
-  knobs.put(2, new Integer[]{0, 0, 0});
-  knobs.put(3, new Integer[]{0, 0, 0});
-  knobs.put(4, new Integer[]{0, 0, 0});
-  knobs.put(5, new Integer[]{0, 0, 0});
-  knobs.put(6, new Integer[]{0, 0, 0});
-  knobs.put(7, new Integer[]{0, 0, 0});
+HashMap<Integer, Parameter[]> initKnobs() {
+  HashMap<Integer, Parameter[]> knobs = new HashMap();
+  knobs.put(0, new Parameter[]{new Parameter(0), new Parameter(0), new Parameter(0)});
+  knobs.put(1, new Parameter[]{new Parameter(0), new Parameter(0), new Parameter(0)});
+  knobs.put(2, new Parameter[]{new Parameter(0), new Parameter(0), new Parameter(0)});
+  knobs.put(3, new Parameter[]{new Parameter(0), new Parameter(0), new Parameter(0)});
+  knobs.put(4, new Parameter[]{new Parameter(0), new Parameter(0), new Parameter(0)});
+  knobs.put(5, new Parameter[]{new Parameter(0), new Parameter(0), new Parameter(0)});
+  knobs.put(6, new Parameter[]{new Parameter(0), new Parameter(0), new Parameter(0)});
+  knobs.put(7, new Parameter[]{new Parameter(0), new Parameter(0), new Parameter(0)});
   return knobs;
 }
 
+int currentPattern = 0;
+int nextPattern = 1;
 void autoUpdate() {
-   
+  
+  int currentPattern = (Math.floorDiv(second(), 30) % 3);
+  faders = initFaders();
+  faders.get(currentPattern).setValue(1.0, 0.0, 1.0);
 }

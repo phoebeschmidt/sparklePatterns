@@ -11,8 +11,7 @@ public class GreenLayer extends Layer {
     image(pg, 0, 0);
   }
   
-  public void setParam1(int v){}
-  public void setParam2(int v){}
-  public void setParam3(int v){}
-
+  public void setParam1(float v){}
+  public void setParam2(float v){}
+  public void setParam3(float v){}
 }
