@@ -14,8 +14,8 @@ public abstract class Layer {
     noTint();
   }
   
-  public abstract void setParam1(int v);
-  public abstract void setParam2(int v);
-  public abstract void setParam3(int v);
+  public abstract void setParam1(float v);
+  public abstract void setParam2(float v);
+  public abstract void setParam3(float v);
 
 }

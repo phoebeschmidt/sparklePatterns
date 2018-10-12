@@ -18,10 +18,10 @@ public class RedLayer extends Layer {
     image(pg, 0,0);
   }
   
-  public void setParam1(int v) {
-    squareSize = Math.round(map(v / 1.0, 0.0, 127.0, 20.0, 60.0));
+  public void setParam1(float v) {
+    squareSize = Math.round(map(v, 0.0, 1.0, 20.0, 60.0));
   }
-  public void setParam2(int v){}
-  public void setParam3(int v){}
+  public void setParam2(float v){}
+  public void setParam3(float v){}
 
 }
