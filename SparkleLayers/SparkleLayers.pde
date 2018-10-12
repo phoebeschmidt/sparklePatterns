@@ -135,7 +135,7 @@ int currentPattern = 0;
 int nextPattern = 1;
 void autoUpdate() {
   
-  int currentPattern = (Math.floorDiv(second(), 30) % 3);
+  int currentPattern = (Math.floorDiv(millis(), 10000) % layers.size());
   faders = initFaders();
   faders.get(currentPattern).setValue(1.0, 0.0, 1.0);
 }
