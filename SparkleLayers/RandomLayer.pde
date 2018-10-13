@@ -31,12 +31,12 @@ public class RandomLayer extends Layer {
     colorMode(RGB, 255);
   }
   
-  public void setParam1(int v){
+  public void setParam1(float v){
     skipModMax = map(v / 1.0, 0.0, 127.0, 0, 6); //range might need to be tweaked
   }
-  public void setParam2(int v){
+  public void setParam2(float v){
     c = map(v / 1.0, 0.0, 127.0, 0, 100);
   }
-  public void setParam3(int v){}
+  public void setParam3(float v){}
 
 }
