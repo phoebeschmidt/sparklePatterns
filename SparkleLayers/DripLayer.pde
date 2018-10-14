@@ -12,21 +12,10 @@ public class DripsLayer extends Layer {
     }
 
     public void draw() {
-      this.drawWithAlpha(1.0);
-    }
-    
-    public void drawWithAlpha(float a) {
         this.pg.beginDraw();
-        this.pg.background(0);
+        this.pg.background(0,0);
         colorMode(HSB, 100);
-        this.pg.fill(
-            color(
-                c,
-                100,
-                100,
-                map(a, 0.0, 1.0, 0, 127)
-             )
-         );
+        this.pg.fill(color(c,100,100));
 
         iteration = iteration + 1;
         noStroke();

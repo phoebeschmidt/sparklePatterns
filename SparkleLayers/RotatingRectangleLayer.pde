@@ -1,7 +1,7 @@
 public class RotatingRectangleLayer extends Layer {
     private int degrees = 0;
     private float rectWidth = 50;
-    private float c = 40;
+    private float c = 60;
 
     public RotatingRectangleLayer(PGraphics pg) {
         super(pg);
@@ -25,9 +25,9 @@ public class RotatingRectangleLayer extends Layer {
     }
 
     public void setParam1(float v){
+        c = map(v, 0.0, 1.0, 0, 100);
     }
     public void setParam2(float v){
-      c = map(v, 0.0, 1.0, 0, 100);
     }
     public void setParam3(float v){}
 }
