@@ -3,17 +3,17 @@ float dx, dy;
 
 void setup()
 {
-  size(120, 300);
+  size(300, 120);
 
   // Connect to the local instance of fcserver. You can change this line to connect to another computer's fcserver
   opc = new OPC(this, "127.0.0.1", 7890);
 
   // Map an 8x8 grid of LEDs to the center of the window, scaled to take up most of the space
-  opc.ledGrid(0, 30, 12, width/2, height/2, height/30.0, width/12.0, 0.0, false);
-  
+  opc.ledGrid(0, 30, 12, width/2, height/2, width/30.0, height/12.0, 0.0, false);
+
   // Make the status LED quiet
   opc.setStatusLed(false);
-  
+
   colorMode(HSB, 100);
 }
 
@@ -46,7 +46,7 @@ void draw() {
   loadPixels();
   for (int x=0; x < width; x++) {
     for (int y=0; y < height; y++) {
-     
+
       float n = fractalNoise(dx + x*scale, dy + y*scale, z) - 0.75;
       float m = fractalNoise(dx + x*scale, dy + y*scale, z + 10.0) - 0.75;
 
@@ -55,7 +55,7 @@ void draw() {
          100 - 100 * constrain(pow(3.0 * n, 3.5), 0, 0.9),
          100 * constrain(pow(3.0 * n, 1.5), 0, 0.9)
          );
-      
+
       pixels[x + width*y] = c;
     }
   }
