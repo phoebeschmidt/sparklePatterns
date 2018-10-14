@@ -19,16 +19,18 @@ void setup()
 
   //// Map an 8x8 grid of LEDs to the center of the window, scaled to take up most of the space
   opc.ledGrid(0, 30, 12, width/2, height/2, height/30.0, width/12.0, -HALF_PI, false);
-  
+
   //// Make the status LED quiet
   opc.setStatusLed(false);
-  
-  layers.add(new RedLayer(createGraphics(width, height)));
-  layers.add(new GreenLayer(createGraphics(width, height)));
+
+  // layers.add(new RedLayer(createGraphics(width, height)));
+  // layers.add(new GreenLayer(createGraphics(width, height)));
   layers.add(new CloudLayer(createGraphics(width, height)));
-  layers.add(new RandomLayer(createGraphics(width, height)));
-  layers.add(new StrobeLayer(createGraphics(width, height)));
-  
+  // layers.add(new RandomLayer(createGraphics(width, height)));
+  // layers.add(new StrobeLayer(createGraphics(width, height)));
+  // layers.add(new RotatingRectangleLayer(createGraphics(width, height)));
+  // layers.add(new DripsLayer(createGraphics(width, height)));
+
   myBus = new MidiBus(this, -1, -1);
   connectToLaunchControl();
 
@@ -39,7 +41,7 @@ void draw() {
    if (autoPilot) {
      autoUpdate();
    }
-   
+
    // Order matters! Last one drawn will be on top.
    for (int i = 0; i < layers.size(); i++) {
      Layer l = layers.get(i);
@@ -61,7 +63,7 @@ void toggleAutoPilot() {
       myBus.sendNoteOff(1, 60, 127);
     }
     println("autoPilot off");
-    autoPilot = false; 
+    autoPilot = false;
   }
 }
 
@@ -94,12 +96,12 @@ void controllerChange(ControlChange change) {
   int number = change.number();
   if (number >= 77 && number <= 84) { // Faders
     if (autoPilot) {
-      return; 
+      return;
     }
-    faders.get(change.number() - 77).setValue(change.value(), 0, 127);  
+    faders.get(change.number() - 77).setValue(change.value(), 0, 127);
   } else if (number >= 1 && number <= 24) { // Knobs
     if (autoPilot) {
-      return; 
+      return;
     }
     int column = Math.floorDiv((number - 1), 3);
     int row = (number - 1) % 3;
@@ -136,7 +138,7 @@ HashMap<Integer, Parameter[]> initKnobs() {
 int currentPattern = 0;
 int nextPattern = 1;
 void autoUpdate() {
-  
+
   int currentPattern = (Math.floorDiv(millis(), 10000) % layers.size());
   faders = initFaders();
   faders.get(currentPattern).setValue(1.0, 0.0, 1.0);
