@@ -34,7 +34,6 @@ public class ConwayLayer extends Layer {
   }
   
   void start() {
-    println("start");
      // Instantiate arrays 
     cells = new int[12][30];
     cellsBuffer = new int[12][30];
