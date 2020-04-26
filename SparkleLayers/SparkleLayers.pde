@@ -15,7 +15,7 @@ void setup()
   size(300, 120);
 
   // Connect to the local instance of fcserver. You can change this line to connect to another computer's fcserver
-  opc = new OPC(this, "127.0.0.1", 7890);
+  opc = new OPC(this, "sparklenet.local", 7890);
 
   //// Map an 8x8 grid of LEDs to the center of the window, scaled to take up most of the space
   // opc.ledGrid(0, 12, 30, width/2, height/2, height/30.0, width/12.0, -HALF_PI, false);
@@ -24,14 +24,18 @@ void setup()
   //// Make the status LED quiet
   opc.setStatusLed(false);
 
+  layers.add(new CloudLayer(createGraphics(width, height)));
   // layers.add(new RedLayer(createGraphics(width, height)));
   // layers.add(new GreenLayer(createGraphics(width, height)));
-  layers.add(new CloudLayer(createGraphics(width, height)));
-  layers.add(new RandomLayer(createGraphics(width, height)));
-  layers.add(new StrobeLayer(createGraphics(width, height)));
-  layers.add(new RotatingRectangleLayer(createGraphics(width, height)));
-  // layers.add(new DripsLayer(createGraphics(width, height)));
-
+  // layers.add(new RandomLayer(createGraphics(width, height)));
+  // layers.add(new StrobeLayer(createGraphics(width, height)));
+  // layers.add(new RotatingRectangleLayer(createGraphics(width, height)));
+  // layers.add(new DripsLayer(createGraphics(width, height)));  
+  // layers.add(new RedLayer(createGraphics(width, height)));
+  // layers.add(new BrownianLayer(createGraphics(width, height)));
+  // ConwayLayer cw = new ConwayLayer(createGraphics(width, height));
+  // layers.add(cw);
+  
   myBus = new MidiBus(this, -1, -1);
   connectToLaunchControl();
 
