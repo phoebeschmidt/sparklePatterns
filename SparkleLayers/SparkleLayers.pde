@@ -24,7 +24,7 @@ void setup()
   opc.setStatusLed(false);
   
   //layers.add(new RedLayer(createGraphics(width, height)));
-  layers.add(new BrownianLayer(createGraphics(width, height)));
+  layers.add(new CloudLayer(createGraphics(width, height)));
   //ConwayLayer cw = new ConwayLayer(createGraphics(width, height));
   //layers.add(cw);
   

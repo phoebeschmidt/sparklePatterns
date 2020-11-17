@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.24/jquery-ui.js"></script>
+    <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.24/themes/ui-lightness/jquery-ui.css" rel="stylesheet" type="text/css"/>
+
+    <title>Fadecandy Colorpicker</title>
+  </head>
+  <body>
+      <div id="tab-element">
+        <h2>Basic element (&lt;span&gt;> example</h2>
+        <span class="cp-basic" style="display: inline-block; vertical-align: top;"></span>
+        <p class='cp-format-output'></p>
+
+        <script>
+          $(function() {
+          	var device_list = [];
+	        var singleColorFrame = function(r, g, b) {
+	            /*
+	             * Create a full frame by repeating a single color
+	             */
+	            var maxPixels = 512;
+	            var a = new Array(maxPixels * 3);
+	            for (var i = 0; i < maxPixels; i++) {
+	                a[i*3] = r;
+	                a[i*3 + 1] = g;
+	                a[i*3 + 2] = b;
+	            }
+	            return a;
+	        };
+	        var onMessage = function(evt) {
+	            var msg = JSON.parse(evt.data);
+
+	            if (msg.type == "list_connected_devices" ||         // Initial connection list
+	                msg.type == "connected_devices_changed") {      // Hotplug event 
+	                device_list = msg.devices;
+	                return;
+	            }
+	        };
+	        var onOpen = function(evt) {
+	            ws.send(JSON.stringify({ type: "list_connected_devices" }));
+	        };
+
+            var serverURL = "ws://sparklenet.local:7890" // window.location.origin.replace("http://", "ws://");
+            var ws = new WebSocket(serverURL);
+            // ws.onerror = this.onError;
+            // ws.onclose = this.onClose;
+            ws.onopen = onOpen;
+            ws.onmessage = onMessage;
+
+            var cp = $('.cp-basic').colorpicker({
+              parts:  ['map'],
+              mode: 's',
+              colorFormat: 'RGB',
+              select: function(event, color) {
+                $('.cp-format-output').text(color.formatted);
+
+                var pixels = singleColorFrame(Math.floor(color.rgb.r * 255), Math.floor(color.rgb.g * 255), Math.floor(color.rgb.b * 255));
+                for (var i = 0; i < device_list.length; i++) {
+	                var d = device_list[i];
+	                var message = { 'type': 'device_pixels', 'pixels': pixels, "device": d };
+	                ws.send(JSON.stringify(message));
+                }
+              }
+            });
+          });
+        </script>
+      </div>
+  </body>
+  
+  <script src="/node_modules/vanderlee-colorpicker/jquery.colorpicker.js"></script>
+  <link href="/node_modules/vanderlee-colorpicker/jquery.colorpicker.css" rel="stylesheet" type="text/css"/>
+  <!-- <script src="/js/colorpicker.js"></script> -->
+</html>	
